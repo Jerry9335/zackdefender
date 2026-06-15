@@ -71,3 +71,35 @@
 | **扫描引擎** | Windows Defender (MpCmdRun.exe + PowerShell) |
 
 **7 个异步 C++ 后端** — 绝不阻塞 UI 线程：
+
+```
+DefenderScanner → 扫描引擎封装 (MpCmdRun)
+ProtectionMonitor → 实时防护状态 (Get-MpComputerStatus)
+ThreatHistory → 历史威胁记录 (Get-MpThreatDetection)
+QuarantineManager → 本地 + Defender 隔离区管理
+TrayManager → 系统托盘图标及通知
+ThemeManager → 深色/浅色/跟随系统主题
+UpdateManager → 版本更新日志提醒
+```
+## 🔧 从源码构建
+
+### 前置条件
+
+- Qt 6.11+ (mingw_64 套件)
+- MinGW 13.1+ (Qt 自带)
+- CMake 3.16+
+- Material Components QML
+
+### 构建步骤
+
+```bash
+# 设置环境变量（请根据实际安装路径修改）
+export PATH="/d/Qt/Tools/CMake_64/bin:/d/Qt/Tools/Ninja:/d/Qt/Tools/mingw1310_64/bin:/d/Qt/6.11.1/mingw_64/bin:$PATH"
+
+# 配置并编译
+cd ZackDefender
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="/d/Qt/6.11.1/mingw_64"
+cmake --build build
+
+# 打包发布（可选）
+deploy.bat
