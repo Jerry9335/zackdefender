@@ -40,8 +40,6 @@
 
 ## 📸 截图预览
 
-> 请将截图放入 `docs/` 文件夹，并替换下方链接：
-
 | 仪表板 | 扫描界面 | 深色主题 |
 |:---:|:---:|:---:|
 | ![](docs/dashboard.png) | ![](docs/scan.png) | ![](docs/theme-dark.png) |
