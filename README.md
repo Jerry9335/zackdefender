@@ -39,7 +39,7 @@
 > Add screenshots to a `docs/` folder, then replace the links below:
 
 | Dashboard | Scan | Dark Theme |
-|:---:|:---:|:---:|:---:|
+|:---:|:---:|:---:|
 | ![](docs/dashboard.png) | ![](docs/scan.png) | ![](docs/theme-dark.png) |
 
 ## 🚀 Installation
