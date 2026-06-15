@@ -36,6 +36,8 @@
 
 ## 📸 Screenshots
 
+> Add screenshots to a `docs/` folder, then replace the links below:
+
 | Dashboard | Scan | Dark Theme |
 |:---:|:---:|:---:|
 | ![](docs/dashboard.png) | ![](docs/scan.png) | ![](docs/theme-dark.png) |
@@ -120,7 +122,7 @@ ZackDefender/
 
 ## 📄 License
 
-This project is released under the [MIT License](LICENSE).
+This project is released under the [MIT License](docs/EULA.txt).
 
 Third-party components:
 - [Qt Framework](https://www.qt.io/) — LGPL v3 / GPL v3
