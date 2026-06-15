@@ -40,7 +40,7 @@
 
 | Dashboard | Scan | Threats | Dark Theme |
 |:---:|:---:|:---:|:---:|
-| ![](docs/dashboard.png) | ![](docs/scan.png) | ![](docs/threats.png) | ![](docs/theme-dark.png) |
+| ![](docs/dashboard.png) | ![](docs/scan.png) | ![](docs/theme-dark.png) |
 
 ## 🚀 Installation
 
