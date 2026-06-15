@@ -25,6 +25,25 @@ ApplicationWindow {
     property alias scanner: globalScanner
     DefenderScanner { id: globalScanner }
 
+    // ── Global monitors — survives page transitions ────────────
+    property alias monitor: globalMonitor
+    ProtectionMonitor {
+        id: globalMonitor
+        Component.onCompleted: refresh()
+    }
+
+    property alias history: globalHistory
+    ThreatHistory {
+        id: globalHistory
+        Component.onCompleted: refresh()
+    }
+
+    property alias quarantine: globalQuarantine
+    QuarantineManager {
+        id: globalQuarantine
+        Component.onCompleted: refresh()
+    }
+
     // ── Theme manager — survives page transitions ───────────────
     property alias themeManager: globalThemeManager
     ThemeManager {

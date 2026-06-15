@@ -12,6 +12,7 @@ TrayManager::TrayManager(QObject *parent)
 
 TrayManager::~TrayManager()
 {
+    delete m_menu;
 }
 
 static QString iconPath()

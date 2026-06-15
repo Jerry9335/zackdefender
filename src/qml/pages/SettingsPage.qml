@@ -13,8 +13,9 @@ Item {
     Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     Behavior on y { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
-    ProtectionMonitor { id: monitor; Component.onCompleted: refresh() }
-    ThreatHistory { id: history; Component.onCompleted: refresh() }
+    // ── Use global instances from Main.qml ──────────────────
+    property var monitor: mainWindow.monitor
+    property var history: mainWindow.history
 
     property bool autoRefresh: false
 

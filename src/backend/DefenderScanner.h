@@ -61,7 +61,7 @@ private slots:
     void onFinished(int exitCode);
 
 private:
-    void parseOutputLine(const QString &line);
+    bool parseOutputLine(const QString &line);
     void appendLog(const QString &text, bool isThreat, const QString &filePath = {}, const QString &threatName = {});
     static QString mpCmdRunPath();
 

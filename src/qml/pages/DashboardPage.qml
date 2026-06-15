@@ -13,8 +13,9 @@ Item {
     Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     Behavior on y { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
-    ProtectionMonitor { id: monitor; Component.onCompleted: refresh() }
-    ThreatHistory { id: history; Component.onCompleted: refresh() }
+    // ── Use global instances from Main.qml ──────────────────
+    property var monitor: mainWindow.monitor
+    property var history: mainWindow.history
 
     Flickable {
         anchors.fill: parent
@@ -106,28 +107,32 @@ Item {
             // ── Protection days banner ──────────────────────────
             Card {
                 Layout.fillWidth: true; padding: 20
-                color: "#E8F5E9"
+                color: monitor.realTimeEnabled ? "#E8F5E9" : "#FFEBEE"
                 RowLayout {
                     spacing: 16
                     Rectangle {
                         width: 52; height: 52; radius: 26
-                        color: "#4CAF50"
+                        color: monitor.realTimeEnabled ? "#4CAF50" : "#F44336"
                         Text {
                             anchors.centerIn: parent
-                            text: "🛡"; font.pixelSize: 26
+                            text: monitor.realTimeEnabled ? "🛡" : "⚠"; font.pixelSize: 26
                         }
                     }
                     ColumnLayout {
                         spacing: 2
                         Text {
-                            text: "已守护 " + mainWindow.scanner.protectionDays + " 天"
+                            text: monitor.realTimeEnabled
+                                  ? "已守护 " + mainWindow.scanner.protectionDays + " 天"
+                                  : "保护已中断"
                             font.pixelSize: 26; font.bold: true
-                            color: "#2E7D32"
+                            color: monitor.realTimeEnabled ? "#2E7D32" : "#C62828"
                         }
                         Text {
-                            text: "Zack Defender 持续保护您的电脑安全"
+                            text: monitor.realTimeEnabled
+                                  ? "Zack Defender 持续保护您的电脑安全"
+                                  : "实时保护已关闭，请尽快开启！"
                             font.pixelSize: 13
-                            color: "#4CAF50"
+                            color: monitor.realTimeEnabled ? "#4CAF50" : "#F44336"
                         }
                     }
                 }

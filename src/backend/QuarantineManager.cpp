@@ -63,6 +63,11 @@ void QuarantineManager::refresh()
     m_process = new QProcess(this);
     connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             this, &QuarantineManager::onDefenderQueryFinished);
+    connect(m_process, &QProcess::errorOccurred, this, [this](QProcess::ProcessError) {
+        m_loading = false;
+        emit loadingChanged();
+        if (m_process) { m_process->deleteLater(); m_process = nullptr; }
+    });
 
     m_process->start("powershell", {
         "-NoProfile", "-Command",
@@ -187,6 +192,18 @@ void QuarantineManager::restoreFile(const QString &filePath)
     QString desktop = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     QString fileName = QFileInfo(filePath).fileName();
     QString dest = desktop + "/" + fileName;
+
+    // Handle duplicate filenames on desktop
+    if (QFile::exists(dest)) {
+        QString base = QFileInfo(fileName).completeBaseName();
+        QString ext = QFileInfo(fileName).suffix();
+        int counter = 1;
+        do {
+            dest = desktop + "/" + base + "_" + QString::number(counter);
+            if (!ext.isEmpty()) dest += "." + ext;
+            counter++;
+        } while (QFile::exists(dest));
+    }
 
     if (QFile::copy(filePath, dest)) {
         QFile::remove(filePath);

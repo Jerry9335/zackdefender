@@ -41,6 +41,11 @@ void ThreatHistory::queryEventLog()
     m_process = new QProcess(this);
     connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             this, &ThreatHistory::onQueryFinished);
+    connect(m_process, &QProcess::errorOccurred, this, [this](QProcess::ProcessError) {
+        m_loading = false;
+        emit loadingChanged();
+        if (m_process) { m_process->deleteLater(); m_process = nullptr; }
+    });
 
     m_process->start("powershell", {
         "-NoProfile", "-Command",
@@ -81,13 +86,16 @@ void ThreatHistory::onQueryFinished(int exitCode)
             ThreatEntry entry;
             entry.threatName = obj["ThreatName"].toString();
             entry.filePath = obj["Resources"].toString();
-            QString action = obj["ActionTaken"].toString();
-            if (action == "2") entry.action = QStringLiteral("已隔离");
-            else if (action == "3") entry.action = QStringLiteral("已删除");
-            else if (action == "5") entry.action = QStringLiteral("已清理");
-            else if (action == "6") entry.action = QStringLiteral("已阻止");
-            else entry.action = action;
-            entry.severity = obj["Severity"].toString();
+            int action = obj["ActionTaken"].toInt();
+            switch (action) {
+                case 2:  entry.action = QStringLiteral("已隔离"); break;
+                case 3:  entry.action = QStringLiteral("已删除"); break;
+                case 5:  entry.action = QStringLiteral("已清理"); break;
+                case 6:  entry.action = QStringLiteral("已阻止"); break;
+                default: entry.action = QString::number(action); break;
+            }
+            int severity = obj["Severity"].toInt();
+            entry.severity = QString::number(severity);
             entry.detectedAt = QDateTime::fromString(obj["DetectionTime"].toString(), Qt::ISODate);
             m_threats.append(entry);
         }

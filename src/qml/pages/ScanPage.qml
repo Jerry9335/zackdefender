@@ -12,7 +12,8 @@ Item {
     Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     Behavior on y { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
-    QuarantineManager { id: quarantineManager }
+    // ── Use global instance from Main.qml ────────────────────
+    property var quarantineManager: mainWindow.quarantine
 
     property int lastExitCode: -1
     property int lastThreatsFound: 0
