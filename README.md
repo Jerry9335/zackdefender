@@ -1,12 +1,12 @@
 # 🛡 Zack Defender
 
 <p align="center">
-  <img src="docs/banner.png" alt="Zack Defender" />
+  <img src="docs/banner.png" alt="Zack Defender" width="600" />
 </p>
 
 <p align="center">
   <b>A modern Windows security center powered by Windows Defender.</b><br>
-  基于 Windows Defender 引擎的现代化安全中心，Material Design 3 界面。
+  基于 Windows Defender 引擎的现代化安全中心 · Material Design 3 界面
 </p>
 
 <p align="center">
@@ -36,19 +36,11 @@
 
 ## 📸 Screenshots
 
-<p align="center">
-  <i>Coming soon — add your screenshots here!</i>
-</p>
+> Add screenshots to a `docs/` folder, then replace the links below:
 
-```
-docs/
-├── dashboard.png
-├── scan.png
-├── threats.png
-├── quarantine.png
-├── settings.png
-└── theme-dark.png
-```
+| Dashboard | Scan | Threats | Dark Theme |
+|:---:|:---:|:---:|:---:|
+| ![](docs/dashboard.png) | ![](docs/scan.png) | ![](docs/threats.png) | ![](docs/theme-dark.png) |
 
 ## 🚀 Installation
 
