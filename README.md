@@ -42,7 +42,7 @@
 
 ## 🚀 Installation
 
-Download the latest installer from [Releases](https://github.com/Zack/ZackDefender/releases):
+Download the latest installer from [Releases](https://github.com/Jerry9335/ZackDefender/releases):
 
 | File | Size |
 |------|------|
@@ -83,7 +83,7 @@ UpdateManager     → Changelog on version bump
 - Qt 6.11+ (mingw_64 kit)
 - MinGW 13.1+ (bundled with Qt)
 - CMake 3.16+
-- [Material Components QML](https://github.com/Zack/material-components-qml) — clone to parent directory
+- Material Components QML
 
 ### Build
 
