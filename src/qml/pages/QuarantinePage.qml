@@ -13,7 +13,8 @@ Item {
     Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     Behavior on y { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
-    QuarantineManager { id: quarantineManager; Component.onCompleted: refresh() }
+    // ── Use global instance from Main.qml ────────────────────
+    property var quarantineManager: mainWindow.quarantine
 
     ColumnLayout {
         anchors.fill: parent

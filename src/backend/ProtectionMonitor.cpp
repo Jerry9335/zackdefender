@@ -46,6 +46,11 @@ void ProtectionMonitor::queryDefenderStatus()
     m_process = new QProcess(this);
     connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             this, &ProtectionMonitor::onQueryFinished);
+    connect(m_process, &QProcess::errorOccurred, this, [this](QProcess::ProcessError) {
+        m_loading = false;
+        emit loadingChanged();
+        if (m_process) { m_process->deleteLater(); m_process = nullptr; }
+    });
 
     m_process->start("powershell", {
         "-NoProfile", "-Command",
@@ -54,7 +59,9 @@ void ProtectionMonitor::queryDefenderStatus()
         "AntispywareEnabled,"
         "AntivirusSignatureLastUpdated,"
         "AntivirusSignatureVersion,"
-        "AMEngineVersion | ConvertTo-Json"
+        "AMEngineVersion,"
+        "MAPSReporting,"
+        "SubmitSamplesConsent | ConvertTo-Json"
     });
 }
 
@@ -77,18 +84,24 @@ void ProtectionMonitor::onQueryFinished(int exitCode)
 
     bool oldRealTime = m_realTimeEnabled;
     bool oldAntivirus = m_antivirusEnabled;
+    bool oldCloud = m_cloudProtection;
+    bool oldSamples = m_submitSamples;
     QString oldUpdate = m_lastUpdate;
     QString oldSig = m_signatureVersion;
     QString oldEngine = m_engineVersion;
 
     m_antivirusEnabled = obj["AntivirusEnabled"].toBool();
     m_realTimeEnabled = obj["RealTimeProtectionEnabled"].toBool();
+    m_cloudProtection = (obj["MAPSReporting"].toInt() != 0);        // 0=Disabled, 1=Basic, 2=Advanced
+    m_submitSamples = (obj["SubmitSamplesConsent"].toInt() != 0);   // 0=NeverSend, 1=AlwaysPrompt, 2=SendSafe, 3=SendAll
     m_lastUpdate = obj["AntivirusSignatureLastUpdated"].toString();
     m_signatureVersion = obj["AntivirusSignatureVersion"].toString();
     m_engineVersion = obj["AMEngineVersion"].toString();
 
     if (oldRealTime != m_realTimeEnabled) emit realTimeChanged();
-    if (oldAntivirus != m_antivirusEnabled) emit antivirusEnabled();
+    if (oldAntivirus != m_antivirusEnabled) emit antivirusEnabledChanged();
+    if (oldCloud != m_cloudProtection) emit cloudProtectionChanged();
+    if (oldSamples != m_submitSamples) emit submitSamplesChanged();
     if (oldUpdate != m_lastUpdate) emit lastUpdateChanged();
     if (oldSig != m_signatureVersion) emit signatureVersionChanged();
     if (oldEngine != m_engineVersion) emit engineVersionChanged();

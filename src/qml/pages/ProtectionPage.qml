@@ -13,7 +13,8 @@ Item {
     Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     Behavior on y { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
-    ProtectionMonitor { id: monitor; Component.onCompleted: refresh() }
+    // ── Use global instance from Main.qml ────────────────────
+    property var monitor: mainWindow.monitor
 
     ColumnLayout {
         anchors.fill: parent
@@ -111,9 +112,9 @@ Item {
                     { name: "实时行为监控", icon: "👁️", desc: "监控可疑程序行为",
                       enabled: monitor.realTimeEnabled },
                     { name: "云提供的保护", icon: "☁️", desc: "Microsoft 云端安全情报",
-                      enabled: true },
+                      enabled: monitor.cloudProtectionEnabled },
                     { name: "自动样本提交", icon: "📤", desc: "提交可疑文件以供分析",
-                      enabled: true }
+                      enabled: monitor.submitSamplesEnabled }
                 ]
                 Card {
                     Layout.fillWidth: true; Layout.preferredHeight: 90

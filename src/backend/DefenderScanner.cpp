@@ -159,8 +159,9 @@ void DefenderScanner::onReadyRead()
         QString trimmed = line.trimmed();
         if (trimmed.isEmpty()) continue;
 
-        parseOutputLine(trimmed);
-        appendLog(trimmed, false);
+        bool handled = parseOutputLine(trimmed);
+        if (!handled)
+            appendLog(trimmed, false);
 
         if (m_currentFile.isEmpty() && trimmed.length() > 3) {
             m_currentFile = trimmed.left(120);
@@ -226,7 +227,7 @@ void DefenderScanner::onFinished(int exitCode)
     emit scanningChanged();
 }
 
-void DefenderScanner::parseOutputLine(const QString &line)
+bool DefenderScanner::parseOutputLine(const QString &line)
 {
     // ── Threat detection patterns ──────────────────────────
     static QRegularExpression threatRe(
@@ -268,7 +269,7 @@ void DefenderScanner::parseOutputLine(const QString &line)
         emit scanLogChanged();
         emit threatFound(path, threat);
         emit threatsChanged();
-        return;
+        return true;   // handled — don't appendLog again
     }
 
     // Check for "Scanning ..." pattern
@@ -276,7 +277,7 @@ void DefenderScanner::parseOutputLine(const QString &line)
     if (scanMatch.hasMatch()) {
         m_currentFile = scanMatch.captured(1).trimmed();
         emit currentFileChanged();
-        return;
+        return false;
     }
 
     // Check for any Windows path in the line
@@ -285,6 +286,7 @@ void DefenderScanner::parseOutputLine(const QString &line)
         m_currentFile = pathMatch.captured(1).trimmed();
         emit currentFileChanged();
     }
+    return false;
 }
 
 void DefenderScanner::clearThreats()
