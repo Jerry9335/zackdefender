@@ -105,6 +105,8 @@ cmake --build build
 deploy.bat
 ```
 ## 📁 项目结构
+
+```
 ZackDefender/
 ├── src/
 │   ├── main.cpp              # 程序入口 + 单例锁
