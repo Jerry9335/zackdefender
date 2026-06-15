@@ -103,3 +103,27 @@ cmake --build build
 
 # 打包发布（可选）
 deploy.bat
+```
+## 📁 项目结构
+ZackDefender/
+├── src/
+│   ├── main.cpp              # 程序入口 + 单例锁
+│   ├── resources.qrc          # Qt 资源文件
+│   ├── backend/               # C++ 后端（7个类）
+│   ├── qml/
+│   │   ├── Main.qml           # 主窗口 + 全局组件
+│   │   └── pages/             # 5个页面
+│   └── assets/                # 图标 + RC 文件
+├── CMakeLists.txt             # CMake 配置
+├── deploy.bat                 # 一键便携打包
+├── EULA.txt                   # 最终用户许可协议
+└── qtquickcontrols2.conf      # 字体配置（微软雅黑）
+```
+
+## 📄 许可证
+
+本项目基于[MIT 许可证](docs/EULA.txt)发布。
+
+第三方组件：
+- [Qt Framework](https://www.qt.io/) — LGPL v3 / GPL v3
+- [Material Components QML](https://github.com/sudoevolve/material-components-qml) — LGPL v3
