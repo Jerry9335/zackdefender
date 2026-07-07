@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(ZackDefender VERSION 1.2.0 LANGUAGES CXX)
+project(ZackDefender VERSION 1.9.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -14,8 +14,17 @@ qt_standard_project_setup()
 # ── Separately create executable and QML module (matching Gallery pattern) ───
 qt_add_executable(appzackdefender MANUAL_FINALIZATION
     src/main.cpp
-    src/backend/DefenderScanner.h
-    src/backend/DefenderScanner.cpp
+    src/backend/ScanEngine.h
+    src/backend/DefenderEngine.h
+    src/backend/DefenderEngine.cpp
+    src/backend/HashEngine.h
+    src/backend/HashEngine.cpp
+    src/backend/ClamAVEngine.h
+    src/backend/ClamAVEngine.cpp
+    src/backend/YaraEngine.h
+    src/backend/YaraEngine.cpp
+    src/backend/EngineManager.h
+    src/backend/EngineManager.cpp
     src/backend/ProtectionMonitor.h
     src/backend/ProtectionMonitor.cpp
     src/backend/ThreatHistory.h
@@ -28,6 +37,10 @@ qt_add_executable(appzackdefender MANUAL_FINALIZATION
     src/backend/ThemeManager.cpp
     src/backend/UpdateManager.h
     src/backend/UpdateManager.cpp
+    src/backend/ContextMenuManager.h
+    src/backend/ContextMenuManager.cpp
+    src/backend/SilverFoxEngine.h
+    src/backend/SilverFoxEngine.cpp
 )
 
 if(WIN32)
@@ -47,6 +60,7 @@ qt_add_qml_module(appzackdefender
         src/qml/pages/ProtectionPage.qml
         src/qml/pages/QuarantinePage.qml
         src/qml/pages/SettingsPage.qml
+        src/qml/pages/SilverFoxPage.qml
 )
 
 set_target_properties(appzackdefender PROPERTIES

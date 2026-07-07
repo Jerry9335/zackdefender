@@ -304,3 +304,23 @@ void DefenderScanner::removeThreat(const QString &filePath)
         }
     }
 }
+
+void DefenderScanner::resetData()
+{
+    QSettings s("ZackDefender", "ZackDefender");
+    s.remove("installDate");
+    s.remove("lastScan/type");
+    s.remove("lastScan/time");
+    s.remove("lastScan/threats");
+
+    // Reset in-memory state
+    m_lastScanType.clear();
+    m_lastScanTime.clear();
+    m_lastThreatCount = 0;
+    m_protectionDays = 0;
+
+    emit lastScanTypeChanged();
+    emit lastScanTimeChanged();
+    emit lastThreatCountChanged();
+    emit protectionDaysChanged();
+}

@@ -8,13 +8,20 @@
 #include <QTextStream>
 #include <QDir>
 #include <QFont>
-#include "backend/DefenderScanner.h"
+#include <QFileInfo>
+#include "backend/DefenderEngine.h"
+#include "backend/HashEngine.h"
+#include "backend/ClamAVEngine.h"
+#include "backend/YaraEngine.h"
+#include "backend/EngineManager.h"
 #include "backend/ProtectionMonitor.h"
 #include "backend/ThreatHistory.h"
 #include "backend/QuarantineManager.h"
 #include "backend/TrayManager.h"
 #include "backend/ThemeManager.h"
 #include "backend/UpdateManager.h"
+#include "backend/ContextMenuManager.h"
+#include "backend/SilverFoxEngine.h"
 
 // Write debug info to a file so we can see what's happening
 static QFile g_logFile;
@@ -43,6 +50,23 @@ int main(int argc, char *argv[])
     QSharedMemory sharedMem("ZackDefender_SingleInstance_v1");
     if (!sharedMem.create(1)) {
         if (sharedMem.error() == QSharedMemory::AlreadyExists) {
+            // ── Right-click scan: pass path to existing instance ──
+            if (argc > 1) {
+                QString path = QString::fromLocal8Bit(argv[1]);
+                QFileInfo fi(path);
+                if (fi.exists()) {
+                    QString requestFile = QDir::tempPath() + "/zackdefender_scan_request.txt";
+                    QFile f(requestFile);
+                    if (f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                        f.write(QDir::toNativeSeparators(fi.absoluteFilePath()).toUtf8());
+                        f.close();
+                    }
+                    // Exit silently — existing instance will pick up the request
+                    g_logFile.close();
+                    return 0;
+                }
+            }
+            // ── Normal duplicate launch: show notice ──────────
             logToFile("Another instance detected — showing notice and exiting");
             QMessageBox::information(nullptr, "Zack Defender",
                 "Zack Defender 已在运行中 🛡\n\n"
@@ -51,6 +75,16 @@ int main(int argc, char *argv[])
         }
         g_logFile.close();
         return 0;
+    }
+
+    // ── CLI argument: right-click scan path ────────────────────
+    QString startupScanPath;
+    if (argc > 1) {
+        QString rawPath = QString::fromLocal8Bit(argv[1]);
+        QFileInfo fi(rawPath);
+        if (fi.exists()) {
+            startupScanPath = QDir::toNativeSeparators(fi.absoluteFilePath());
+        }
     }
 
     // ── Global font: Microsoft YaHei ─────────────────────────────
@@ -62,12 +96,18 @@ int main(int argc, char *argv[])
     logToFile("App created. Registering types...");
 
     // Register C++ types for QML
-    qmlRegisterType<DefenderScanner>("zack.defender", 1, 0, "DefenderScanner");
+    qmlRegisterType<DefenderEngine>("zack.defender", 1, 0, "DefenderEngine");
+    qmlRegisterType<HashEngine>("zack.defender", 1, 0, "HashEngine");
+    qmlRegisterType<ClamAVEngine>("zack.defender", 1, 0, "ClamAVEngine");
+    qmlRegisterType<YaraEngine>("zack.defender", 1, 0, "YaraEngine");
+    qmlRegisterType<EngineManager>("zack.defender", 1, 0, "EngineManager");
     qmlRegisterType<ProtectionMonitor>("zack.defender", 1, 0, "ProtectionMonitor");
     qmlRegisterType<ThreatHistory>("zack.defender", 1, 0, "ThreatHistory");
     qmlRegisterType<QuarantineManager>("zack.defender", 1, 0, "QuarantineManager");
     qmlRegisterType<ThemeManager>("zack.defender", 1, 0, "ThemeManager");
     qmlRegisterType<UpdateManager>("zack.defender", 1, 0, "UpdateManager");
+    qmlRegisterType<ContextMenuManager>("zack.defender", 1, 0, "ContextMenuManager");
+    qmlRegisterType<SilverFoxEngine>("zack.defender", 1, 0, "SilverFoxEngine");
     qRegisterMetaType<ThreatEntry>("ThreatEntry");
 
     logToFile("Types registered. Setting up engine...");
@@ -87,6 +127,13 @@ int main(int argc, char *argv[])
     TrayManager *trayManager = new TrayManager(&app);
     QObject::connect(trayManager, &TrayManager::exitRequested, &app, &QCoreApplication::quit);
     engine.rootContext()->setContextProperty("trayManager", trayManager);
+
+    // ── Right-click scan: pass startup path to QML ──────────
+    engine.rootContext()->setContextProperty("_startupScanPath", startupScanPath);
+
+    // ── Right-click context menu manager ────────────────────
+    ContextMenuManager *ctxMenuManager = new ContextMenuManager(&app);
+    engine.rootContext()->setContextProperty("ctxMenuManager", ctxMenuManager);
 
     const QUrl url("qrc:/zack/defender/src/qml/Main.qml");
     logToFile("URL: " + url.toString());

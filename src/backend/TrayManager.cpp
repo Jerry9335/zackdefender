@@ -4,6 +4,8 @@
 #include <QFile>
 #include <QCoreApplication>
 #include <QIcon>
+#include <QDir>
+#include <QFileInfo>
 
 TrayManager::TrayManager(QObject *parent)
     : QObject(parent)
@@ -140,4 +142,27 @@ void TrayManager::setScanning(bool scanning)
         }
         emit scanningChanged();
     }
+}
+
+QString TrayManager::checkScanRequest()
+{
+    // Right-click context menu: a second instance writes the path to this file
+    QString requestFile = QDir::tempPath() + "/zackdefender_scan_request.txt";
+    QFile f(requestFile);
+    if (f.exists() && f.size() > 0) {
+        if (f.open(QIODevice::ReadOnly)) {
+            QString content = QString::fromUtf8(f.readAll()).trimmed();
+            f.close();
+            f.remove(); // consume the request
+            if (!content.isEmpty()) {
+                // Validate: path must exist (file or directory)
+                QFileInfo fi(content);
+                if (fi.exists())
+                    return QDir::toNativeSeparators(fi.absoluteFilePath());
+            }
+        } else {
+            f.remove(); // stale/broken file
+        }
+    }
+    return {};
 }

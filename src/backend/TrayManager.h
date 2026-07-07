@@ -20,6 +20,10 @@ public:
     /// Called once after the main window is created to wire up close-to-tray
     Q_INVOKABLE void setup(QObject *window);
 
+    /// Check for scan requests from right-click context menu (second instance).
+    /// Returns the file/folder path if a pending request exists, empty string otherwise.
+    Q_INVOKABLE QString checkScanRequest();
+
 public slots:
     void showWindow();
     void hideWindow();

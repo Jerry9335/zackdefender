@@ -40,7 +40,8 @@ public slots:
     void startScan(int scanType, const QString &customPath = {});
     void cancelScan();
     void clearThreats();
-    void removeThreat(const QString &filePath);
+    Q_INVOKABLE void removeThreat(const QString &filePath);
+    Q_INVOKABLE void resetData();
 
 signals:
     void scanningChanged();

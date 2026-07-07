@@ -161,6 +161,7 @@ Item {
         // ── Bottom actions ──────────────────────────────────────
         Card {
             Layout.fillWidth: true; padding: 18
+            implicitHeight: 70  // single-row button card
 
             RowLayout {
                 spacing: 12

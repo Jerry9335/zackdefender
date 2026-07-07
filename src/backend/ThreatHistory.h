@@ -3,6 +3,7 @@
 #include <QDateTime>
 #include <QList>
 #include <QProcess>
+#include <QJsonArray>
 
 struct ThreatEntry {
     Q_GADGET
@@ -19,7 +20,8 @@ public:
     QDateTime detectedAt;
 };
 
-/// Reads Windows Defender threat history from Event Log (async)
+/// Global threat history — collects threats from all engines + Windows Defender log.
+/// Persisted to QSettings, survives app restart.
 class ThreatHistory : public QObject
 {
     Q_OBJECT
@@ -36,8 +38,11 @@ public:
     bool isLoading() const { return m_loading; }
 
 public slots:
-    void refresh();
-    void clearHistory();
+    void refresh();             // query Windows Defender log
+    void clearHistory();        // clear all (including persisted)
+    void addThreat(const QString &filePath, const QString &threatName,
+                   const QString &engine = "Windows Defender",
+                   int severity = 3);
 
 signals:
     void threatsChanged();
@@ -48,6 +53,8 @@ private slots:
 
 private:
     void queryEventLog();
+    void saveToSettings();
+    void loadFromSettings();
 
     QList<ThreatEntry> m_threats;
     bool m_loading = false;

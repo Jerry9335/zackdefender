@@ -4,7 +4,7 @@
 #include <QFile>
 
 // Update this when releasing a new version
-static const char *CURRENT_VERSION = "1.2.0";
+static const char *CURRENT_VERSION = "1.9.0";
 
 UpdateManager::UpdateManager(QObject *parent)
     : QObject(parent)
@@ -29,4 +29,11 @@ void UpdateManager::dismiss()
 {
     QSettings s("ZackDefender", "ZackDefender");
     s.setValue("update/lastSeenVersion", CURRENT_VERSION);
+}
+
+void UpdateManager::resetChangelog()
+{
+    QSettings s("ZackDefender", "ZackDefender");
+    s.remove("update/lastSeenVersion");
+    m_show = true;
 }

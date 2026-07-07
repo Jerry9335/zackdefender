@@ -13,6 +13,7 @@ public:
     bool showChangelog() const { return m_show; }
 
     Q_INVOKABLE void dismiss();   // mark current version as seen
+    Q_INVOKABLE void resetChangelog();  // clear seen version, show changelog next launch
 
 private:
     bool m_show = false;
