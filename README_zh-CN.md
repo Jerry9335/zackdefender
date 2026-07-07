@@ -44,9 +44,9 @@
 
 ## 📸 截图预览
 
-| 仪表板 | 扫描界面 | 深色主题 |
-|:---:|:---:|:---:|
-| ![](docs/dashboard.png) | ![](docs/scan.png) | ![](docs/theme-dark.png) |
+| 仪表板 | 扫描界面 | 深色主题 | 银狐查杀 |
+|:---:|:---:|:---:|:---:|
+| ![](docs/dashboard.png) | ![](docs/scan.png) | ![](docs/theme-dark.png) | ![](docs/Silver.png) |
 
 ## 🚀 安装指南
 
