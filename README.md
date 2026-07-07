@@ -1,7 +1,7 @@
 # 🛡 Zack Defender
 
 <p align="center">
-  <img src="docs/banner.png" alt="Zack Defender" width="600" />
+  <img src="docs/banner1.png" alt="Zack Defender" width="600" />
 </p>
 
 <p align="center">
