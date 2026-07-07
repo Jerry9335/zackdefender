@@ -44,9 +44,9 @@
 
 ## 📸 Screenshots
 
-| Dashboard | Scan | Dark Theme |
-|:---:|:---:|:---:|
-| ![](docs/dashboard.png) | ![](docs/scan.png) | ![](docs/theme-dark.png) |
+| Dashboard | Scan | Dark Theme | Silver fox |
+|:---:|:---:|:---:|:---:|
+| ![](docs/dashboard.png) | ![](docs/scan.png) | ![](docs/theme-dark.png) | ![](docs/Silver fox.png) |
 
 ## 🚀 Installation
 
