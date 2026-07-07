@@ -55,7 +55,6 @@ Download the latest release from [Releases](https://github.com/Jerry9335/ZackDef
 | File | Format | Notes |
 |------|--------|-------|
 | `Zack-Defender-v1.9.0.msix` | MSIX | Recommended — modern installer, Win10 21H2+ |
-| `Zack-Defender-v1.9.0.zip` | Portable | Extract and run, no installation needed |
 
 System requirements:
 
